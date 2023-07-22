@@ -5,19 +5,36 @@ Ever wondered how it is to not only have human guests on your party?
 Human party guests, especially those new to the field of natural language processing, are greatly fascinated and entertained by the verbalization skills and the eloquence of well-trained multi-purpose large language models.
 Invite an artificial-intelligence-based person to your party!
 Let them have conversations using an interface creatively crafted by GPT-3.5-Turbo itself.
+All you need is a device running Python, a web browser and an account at OpenAi.
+(Make sure to set appropriate soft and hard limits on your payment type. Using GPT-3.5-Turbo for this task is very cheap though.)
+
+<p align="center">
+  <img src="doc/user_interface.png" />
+</p>
+
 
 ## Installation
-* install using poetry
-* provide an `.env` file with the following environment variables
+* Install using poetry:
+    ```sh
+    python -m poetry install
+    ```
+* Provide an `.env` file with the following environment variables:
     * OPENAI_API_KEY - openai-issued API key
     * OPENAI_ORG - organization within openai
 
 ## Usage
 * Modify the contents of [`settings.yml`](settings.yml) to personalize the application.
 * Make it transparent for your guests that their data is sent to an OpenAi server and that conversation records are created.
+* Run the application:
+    * Option 1 (OS-agnostic):
+        ```sh
+        python -m poetry run python app.py
+        ```
+    * Option 2 (Windows): Run [`app_run.bat`](app_run.bat)
 
 ## Development
-tbd
+* Proceed as instructed in section [Installation](#installation).
+* ... go right at it.
 
 ## To Do
 * Website/Frontend
