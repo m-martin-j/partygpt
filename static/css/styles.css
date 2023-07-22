@@ -1,0 +1,101 @@
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 30px;
+}
+
+.chat-container {
+    background-color: #222;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.conversation {
+    height: 400px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+.user-input-container {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+#user-input {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+}
+
+.user-input {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    align-self: flex-end;
+    max-width: 80%;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    white-space: pre-wrap;
+    margin-left: 20%
+}
+
+.ai-message {
+    background-color: #2196f3;
+    color: #fff;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    align-self: flex-start;
+    max-width: 80%;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    white-space: pre-wrap;
+} /* TODO: class for common properties of user-input and ai-message */
+
+#send-button,
+#close-button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#send-button:hover {
+    background-color: #45a049;
+}
+
+#close-button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: #f44336;
+}
+
+#close-button:hover {
+    background-color: #d32f2f;
+}
