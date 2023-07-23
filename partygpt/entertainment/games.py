@@ -1,4 +1,6 @@
 
+# TODO: functionality not yet integrated
+
 class Game:
     def __init__(
             self,
