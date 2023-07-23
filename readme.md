@@ -24,7 +24,7 @@ All you need is a device running Python, a web browser and an account at [OpenAI
 
 ## Usage
 * Modify the contents of [`settings.yml`](settings.yml) to personalize the application.
-* Make it transparent for your guests that their data is sent to an OpenAI server and that conversation records are created.
+* Make it transparent for your guests that their data is sent to an OpenAI server and that conversation records are created (conversation records can be deactivated via [`settings.yml`](settings.yml)).
 * Run the application:
     * Option 1 (OS-agnostic):
         ```sh

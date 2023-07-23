@@ -13,7 +13,7 @@ from partygpt.comms.various import read_yaml
 
 PATH_SETTINGS = 'settings.yml'
 APPLICATION_SETTINGS = read_yaml(path=PATH_SETTINGS)['application']
-PATH_FOLDER_CONVERSATION_RECORDS = 'conversation_records'
+PATH_FOLDER_CONVERSATION_RECORDS = APPLICATION_SETTINGS['conversation_records_folder']
 REFRESH_TIMER_AI_GOODBYE = APPLICATION_SETTINGS['refresh_conversation_after_ai_says_goodbye']
 
 app = Flask(__name__)
@@ -84,6 +84,10 @@ def trigger_session_refresh(goodbye_msg):
 
 if __name__ == '__main__':
     logger.info('System starting.')
+    if PATH_FOLDER_CONVERSATION_RECORDS:
+        logger.info(f'Conversations will be recorded to folder {PATH_FOLDER_CONVERSATION_RECORDS}.')
+    else:
+        logger.info(f'Conversations will not be recorded.')
 
     def end_communication(goodbye: str):
         trigger_session_refresh(goodbye_msg=goodbye)
