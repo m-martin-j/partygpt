@@ -8,11 +8,13 @@ from flask_socketio  import SocketIO, emit
 
 from partygpt import AiGuest
 from partygpt.humanly import Persona
+from partygpt.comms.various import read_yaml
 
 
 PATH_SETTINGS = 'settings.yml'
+APPLICATION_SETTINGS = read_yaml(path=PATH_SETTINGS)['application']
 PATH_FOLDER_CONVERSATION_RECORDS = 'conversation_records'
-REFRESH_TIMER_AI_GOODBYE = 30
+REFRESH_TIMER_AI_GOODBYE = APPLICATION_SETTINGS['refresh_conversation_after_ai_says_goodbye']
 
 app = Flask(__name__)
 # app.config['SERVER_NAME'] = '127.0.0.1:5000'

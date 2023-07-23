@@ -1,3 +1,6 @@
+application:
+  refresh_conversation_after_ai_says_goodbye: 30  # seconds
+
 model:
   id: gpt-3.5-turbo
 
