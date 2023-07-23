@@ -7,7 +7,7 @@ import yaml
 logger = logging.getLogger(__name__)
 
 
-def read_yaml(path: str):
+def read_yaml(path: str) -> dict:
     res = None
     with open(path, 'r') as f:
         try:
