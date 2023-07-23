@@ -42,6 +42,9 @@ All you need is a device running Python, a web browser and an account at [OpenAI
 * ... go right at it.
 
 ## To Do
+* Distribution
+    * Use PyInstaller or cx_Freeze; python -m PyInstaller -F app.py (execute from within virtual env so all packages can be seen);
+        * flask socketio: ValueError: Invalid async_mode specified --> https://stackoverflow.com/questions/54150895/valueerror-invalid-async-mode-specified-when-bundling-a-flask-app-using-cx-fr
 * Website/Frontend
     * check if input sanitation suffices
     * create concept for allowing guests to load the frontend from their personal devices from within a network (-> distinguish various sessions, load balancing etc.)
