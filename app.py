@@ -74,6 +74,11 @@ def refresh_session():
     ai_guest.reset(persona=None)
     return ''  # may not return None or omit return statement
 
+@app.route('/save-records', methods=['GET'])
+def save_records():
+    ai_guest.save_messages_history()
+    return '', 200
+
 def trigger_session_refresh(goodbye_msg):
     logger.info('Session refreshed (per backend).')
     sockets.emit('instruction', {

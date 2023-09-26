@@ -96,6 +96,11 @@ document.addEventListener("DOMContentLoaded", function() {
         userInput.disabled = false;
     }
 
+    function saveRecords() {
+        fetch('/save-records', {
+            method: 'GET'
+        });
+    }
 
     function close_session(){
         conversation.innerHTML = "";
@@ -109,6 +114,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
     closeButton.addEventListener("click", function() {
+        saveRecords();
         close_session();
     });
 
@@ -120,7 +126,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function startIdleTimer() {
         clearTimeout(idleTimer);
-        idleTimer = setTimeout(close_session, idleTimeoutDuration);
+        idleTimer = setTimeout (function () {
+            saveRecords();
+            close_session();
+          }, idleTimeoutDuration);
     }
 
     const inputElements = document.querySelectorAll('input, textarea');
@@ -143,6 +152,7 @@ document.addEventListener("DOMContentLoaded", function() {
         type = instruction.type
         if (type == 'refresh_session_timer') {
             addMessage(instruction.goodbye_msg, 'assistant');
+            saveRecords();
             lockInputField();
             setTimeout(close_session, instruction.timer * 1000);  // TODO: clear timer if second call here
         }
