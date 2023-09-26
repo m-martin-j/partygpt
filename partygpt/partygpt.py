@@ -46,7 +46,7 @@ class Entity:
                 os.makedirs(self._conversation_record_folder_path, exist_ok=True)
                 file_name = os.path.join(self._conversation_record_folder_path,
                                         str(self._current_conversation_start) + '.convrec')
-                with open(file_name, 'x') as f:
+                with open(file_name, 'x', encoding='utf-8') as f:
                     for el in self._messages_history:
                         role_ = el['role']
                         content_ = el['content']
