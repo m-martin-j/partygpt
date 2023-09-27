@@ -90,6 +90,13 @@ class Entity:
         self._clear_messages_history()
         self._current_conversation_start = int(time.time())
 
+    def set_conversation_record_folder_path(self, new_path):
+        self._conversation_record_folder_path = new_path
+        if new_path != '':
+            logger.info(f'Chat will be recorded to {new_path}')
+        else:
+            logger.info('Chat will not be recorded')    
+
     def communicate(
             self,
             messages: list,

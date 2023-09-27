@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 
     // ---------------- USER INTERACTION ----------------
     var conversation = document.getElementById("conversation");
@@ -6,25 +6,28 @@ document.addEventListener("DOMContentLoaded", function() {
     var buttonContainer = document.getElementById("button-container");
     var sendButton = document.getElementById("send-button");
     var closeButton = document.getElementById("close-button");
+    var setRecordButton = document.getElementById("set-recording");
+    var recordStatus = document.getElementById("recording-status");
+    var chatInfo = document.getElementById("chat-info");
     var newSessionHint = document.getElementById("new-session-hint");
 
+    const featureFlags = {
+        allowRecords: true
+    };
 
-    function setFocusOnInput() {
-        userInput.focus();
-    }
 
-    setFocusOnInput();
+    chatStartUIChange();
 
 
     function addMessage(message, sender) {
         var messageElement = document.createElement("div");
         messageElement.classList.add("message");
         if (sender === "user") {
-          messageElement.classList.add("user-input");
-          messageElement.textContent = "You: " + message;
+            messageElement.classList.add("user-input");
+            messageElement.textContent = "You: " + message;
         } else if (sender === "assistant") {
-          messageElement.classList.add("ai-message");
-          messageElement.textContent = "AI: " + message; // BACKUP: render newlines: .replace(/(?:\r\n|\r|\n)/g, '<br>');
+            messageElement.classList.add("ai-message");
+            messageElement.textContent = "AI: " + message; // BACKUP: render newlines: .replace(/(?:\r\n|\r|\n)/g, '<br>');
         }
         else {
             console.error('Unknown message sender:', sender);
@@ -46,34 +49,35 @@ document.addEventListener("DOMContentLoaded", function() {
             fetch('/process-input', {
                 method: 'POST',
                 headers: {
-                  'Content-Type': 'application/json',
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ message }),
             })
-            // and handle the response from the assistant
-            .then((response) => response.json())
-            .then((data) => {
-                const reply = data.reply;
-                if (reply === '' || reply === null) {
-                    console.log('Received null response from backend.');
-                }
-                else {
-                    addMessage(reply, 'assistant');
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+                // and handle the response from the assistant
+                .then((response) => response.json())
+                .then((data) => {
+                    const reply = data.reply;
+                    if (reply === '' || reply === null) {
+                        console.log('Received null response from backend.');
+                    }
+                    else {
+                        addMessage(reply, 'assistant');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
         }
     }
 
 
-    sendButton.addEventListener("click", function() {
+    sendButton.addEventListener("click", function () {
         handleUserInput();
+        setFocusOnInput();
     });
 
 
-    document.addEventListener("keydown", function(event) {
+    document.addEventListener("keydown", function (event) {
         if (event.shiftKey && event.key === "Enter") {
             event.preventDefault(); // Prevent form submission
             var currentCursorPosition = userInput.selectionStart; // Get current cursor position
@@ -85,6 +89,7 @@ document.addEventListener("DOMContentLoaded", function() {
         else if (event.key === "Enter") {
             event.preventDefault();
             handleUserInput();
+            setFocusOnInput();
         }
     });
 
@@ -92,6 +97,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function chatEndedUIChange() {
         lockInputField();
         HideButtonContainer();
+        hideChatInfo();
     }
 
     function chatStartUIChange() {
@@ -99,6 +105,20 @@ document.addEventListener("DOMContentLoaded", function() {
         unlockInputField();
         setFocusOnInput();
         showButtonContainer();
+        showChatInfo();
+    }
+
+    function setFocusOnInput() {
+        userInput.focus();
+    }
+
+
+    function hideChatInfo() {
+        chatInfo.style.display = 'none';
+    }
+
+    function showChatInfo() {
+        chatInfo.style.display = 'block';
     }
 
     function lockInputField() {
@@ -118,12 +138,30 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function showNewSessionHint() {
-       newSessionHint.style.display = 'block';
+        newSessionHint.style.display = 'block';
     }
 
     function hideNewSessionHint() {
         newSessionHint.style.display = 'none';
-     }
+    }
+
+    function setRecord(flag) {
+        const url = `/set-records?flag=${flag}`;
+        fetch(url, {
+            method: 'GET'
+        })
+            .then((response) => {
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    console.error('Request failed with status:', response.status);
+                }
+            })
+            .then((data) => {
+                recordStatus.textContent = data.message;
+                setRecordButton.textContent = featureFlags.allowRecords ? 'Disable recording' : 'Enable recording'
+            });
+    }
 
     function saveRecords() {
         fetch('/save-records', {
@@ -131,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    function close_session(){
+    function close_session() {
         conversation.innerHTML = "";
         fetch('/close-session', {
             method: 'GET'
@@ -142,14 +180,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function refreshNewSession() {
         chatStartUIChange();
+        featureFlags.allowRecords = true; //enable chat recording by default
+        setRecord(featureFlags.allowRecords);
+
     }
 
 
-    closeButton.addEventListener("click", function() {
+    closeButton.addEventListener("click", function () {
         saveRecords();
         close_session();
     });
 
+    setRecordButton.addEventListener("click", function () {
+        console.log("flag is now " + featureFlags.allowRecords);
+        featureFlags.allowRecords = !featureFlags.allowRecords;
+        setRecord(featureFlags.allowRecords);
+    })
 
 
     // ---------------- IDLE REFRESH ----------------
@@ -158,10 +204,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function startIdleTimer() {
         clearTimeout(idleTimer);
-        idleTimer = setTimeout (function () {
+        idleTimer = setTimeout(function () {
             saveRecords();
             close_session();
-          }, idleTimeoutDuration);
+        }, idleTimeoutDuration);
     }
 
     const inputElements = document.querySelectorAll('input, textarea');
@@ -176,11 +222,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // ---------------- INSTRUCTIONS FROM BACKEND ----------------
     var socket = io();
-    socket.on('connect', function() {
-        socket.emit('connection', {state: 'success'});
+    socket.on('connect', function () {
+        socket.emit('connection', { state: 'success' });
     });
 
-    socket.on('instruction', function(instruction) {
+    socket.on('instruction', function (instruction) {
         type = instruction.type
         if (type == 'refresh_session_timer') {
             addMessage(instruction.goodbye_msg, 'assistant');
@@ -195,4 +241,4 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
 
-  });
+});

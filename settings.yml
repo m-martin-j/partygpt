@@ -1,7 +1,8 @@
 application:
   refresh_conversation_after_ai_says_goodbye: 30  # seconds
-  conversation_records_folder: conversation_records  # remove the characters after ":" to deactivate conversation recording
-
+  records_folder_name: &name_anchor conversation_records
+  conversation_records_folder: *name_anchor  # remove the characters after ":" to deactivate conversation recording
+  
 model:
   id: gpt-3.5-turbo
 
@@ -36,6 +37,8 @@ guest:
     special_skill:  # you can ___.
     - tell funny jokes
     - provide facts about science and nature in an understandable way
+    - talk like Barney Stinson
+    - talk like Winnie the Pooh
     - talk like a pirate
     - create incredible drinks (you actually named the party's signature drink "Rum Royale Bliss")
     - start playing a quiz on basic knowledge with the guest
