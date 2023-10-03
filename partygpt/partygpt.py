@@ -41,12 +41,16 @@ class Entity:
         return total_t['sum']
 
     def _clear_messages_history(self) -> None:
+        self._messages_history = []
+
+    def save_messages_history(self) -> None:
         if self._conversation_record_folder_path and self._messages_history:  # only record if path defined
+            logger.info('Chat records is now saving...')
             try:
                 os.makedirs(self._conversation_record_folder_path, exist_ok=True)
                 file_name = os.path.join(self._conversation_record_folder_path,
                                         str(self._current_conversation_start) + '.convrec')
-                with open(file_name, 'x') as f:
+                with open(file_name, 'x', encoding='utf-8') as f:
                     for el in self._messages_history:
                         role_ = el['role']
                         content_ = el['content']
@@ -63,8 +67,7 @@ class Entity:
                 logger.info(f'Wrote conversation to {file_name}.')
             except Exception as e:
                 logger.error(f'Trouble writing conversation history to file: {type(e).__name__}: {e}')
-
-        self._messages_history = []
+    
 
     def set_functions(
             self,
@@ -86,6 +89,13 @@ class Entity:
     def reset(self):
         self._clear_messages_history()
         self._current_conversation_start = int(time.time())
+
+    def set_conversation_record_folder_path(self, new_path):
+        self._conversation_record_folder_path = new_path
+        if new_path != '':
+            logger.info(f'Chat will be recorded to {new_path}')
+        else:
+            logger.info('Chat will not be recorded')    
 
     def communicate(
             self,

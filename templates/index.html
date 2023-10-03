@@ -1,26 +1,72 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>PartyGPT</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+        crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
+
 <body>
     <div class="container">
         <h1>PartyGPT</h1>
+        <div id="chat-info">
+            <div id="speak-info">
+                <p>Click on the response of our special guest, it will speak to you!
+                    <br> Click again to stop him talking &#x1F910;
+                </p>
+            </div>
+            <div id="recording-info">
+                <p id="recording-status">Chat will be recorded.</p>
+                <button id="set-recording">Disable Recording</button>
+            </div>
+        </div>
         <div class="chat-container">
             <div id="conversation" class="conversation"></div>
+
             <div class="user-input-container">
-                <textarea id="user-input" placeholder="Type your message here..."></textarea>
+                <div id="speak-mode-container" class="mode-container" style="display: none">
+                    <div id="audio-input-container">
+                        <label for="language-dropdown">Select Language</label>
+                        <select id="language-dropdown">
+                            <option value="en-US">English</option>
+                            <option value="de-DE">Deutsch</option>
+                            <option value="zh-CN">中文</option>
+                            <option value="es-ES">Castellano</option>
+                        </select>
+                        <div id="audio-icon-container" class="icon-container">
+                            <a href="#">
+                                <img id="audio-input-icon" src="../static/images/mic-icon.png" alt="Audio Input">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div id="write-mode-container" class="mode-container">
+                    <textarea id="user-input" placeholder="Type your message here..."></textarea>
+                </div>
             </div>
-            <div class="button-container">
+
+            <div id="button-container" class="button-container">
                 <button id="send-button">Send</button>
+                <button id="mode-toggle-button">Speak Mode</button>
                 <button id="close-button">Close Session</button>
             </div>
+
+            <div id="new-session-hint-container">
+                <p id="new-session-hint" style="display: none">Session ended by PartyGPT. If you stay on this page, a
+                    new session will be started
+                    soon... </p>
+            </div>
+
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/script.mjs') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/audio.mjs') }}"></script>
+
 </body>
+
 </html>

@@ -3,7 +3,7 @@ import logging
 import threading  # TEST
 
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from flask_socketio  import SocketIO, emit
 
 from partygpt import AiGuest
@@ -14,6 +14,7 @@ from partygpt.comms.various import read_yaml
 PATH_SETTINGS = 'settings.yml'
 APPLICATION_SETTINGS = read_yaml(path=PATH_SETTINGS)['application']
 PATH_FOLDER_CONVERSATION_RECORDS = APPLICATION_SETTINGS['conversation_records_folder']
+PATH_FOLDER_CONVERSATION_RECORDS_NAME = APPLICATION_SETTINGS['records_folder_name']
 REFRESH_TIMER_AI_GOODBYE = APPLICATION_SETTINGS['refresh_conversation_after_ai_says_goodbye']
 
 app = Flask(__name__)
@@ -27,7 +28,7 @@ log_formatter = logging.Formatter("%(asctime)s:%(levelname)s:%(name)s:%(message)
 log_console_handler = logging.StreamHandler()
 log_console_handler.setLevel(logging.INFO)
 log_console_handler.setFormatter(log_formatter)
-log_file_handler = logging.FileHandler('debug.log')
+log_file_handler = logging.FileHandler('debug.log', encoding='utf-8')
 log_file_handler.setLevel(logging.DEBUG)
 log_file_handler.setFormatter(log_formatter)
 root_logger = logging.getLogger()
@@ -46,6 +47,7 @@ def log_connect(data):
 
 @app.route('/')
 def index():
+    ai_guest.set_conversation_record_folder_path(PATH_FOLDER_CONVERSATION_RECORDS_NAME)
     return render_template('index.html')
 
 @app.route('/process-input', methods=['POST'])
@@ -73,6 +75,26 @@ def refresh_session():
     logger.info('Session refreshed (per frontend).')
     ai_guest.reset(persona=None)
     return ''  # may not return None or omit return statement
+
+@app.route('/save-records', methods=['GET'])
+def save_records():
+    ai_guest.save_messages_history()
+    return '', 200
+
+@app.route('/set-records', methods=['GET'])
+def set_records():
+    flag = request.args.get('flag')
+    logger.info(f'Chat recording is set to: {flag}')
+    response_data = {}
+    if flag == 'true': # (?)flag param can only be interpreted as string 
+        ai_guest.set_conversation_record_folder_path(PATH_FOLDER_CONVERSATION_RECORDS_NAME)
+        response_data['message'] = 'Chat will be recorded'
+    else:
+        ai_guest.set_conversation_record_folder_path('')
+        response_data['message'] = 'Chat will not be recorded'
+    
+    response = jsonify(response_data)
+    return response, 200, {'Content-Type': 'application/json'}
 
 def trigger_session_refresh(goodbye_msg):
     logger.info('Session refreshed (per backend).')
