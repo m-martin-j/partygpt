@@ -1,8 +1,8 @@
 import { handleUserInput } from './script.mjs';
-import { franc } from 'https://esm.sh/franc@6?bundle';
+import { franc } from 'https://esm.sh/franc@6?bundle'; //https://github.com/wooorm/franc
 import { iso6393To1 } from './iso6393-to-bcp47.mjs';
 
-
+//https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API#speech_recognition
 var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 var isSpeakMode = false;
 var isNowSpeaking = false;
@@ -21,6 +21,7 @@ export function textToSpeech(message, isByClicking) {
 
     if ((isSpeakMode || isByClicking)) {
         console.log('message to speak:', message);
+        //https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesisUtterance
         var utterance = new SpeechSynthesisUtterance();
 
         utterance.onstart = function (event) {
