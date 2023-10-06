@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const reply = data.reply;
                 if (reply === '' || reply === null) {
                     console.log('Received null response from backend.');
+                    // this is normal if backend terminates the session
                 }
                 else {
                     addMessage(reply, 'assistant');
