@@ -2,7 +2,7 @@ application:
   refresh_conversation_after_ai_says_goodbye: 30  # seconds
   records_folder_name: &name_anchor conversation_records
   conversation_records_folder: *name_anchor  # remove the characters after ":" to deactivate conversation recording
-  
+
 model:
   id: gpt-3.5-turbo
 

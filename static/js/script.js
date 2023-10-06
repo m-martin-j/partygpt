@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
 
     // ---------------- USER INTERACTION ----------------
     var conversation = document.getElementById("conversation");
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    document.addEventListener("keydown", function (event) {
+    document.addEventListener("keydown", function(event) {
         if (event.shiftKey && event.key === "Enter") {
             event.preventDefault(); // Prevent form submission
             var currentCursorPosition = userInput.selectionStart; // Get current cursor position
@@ -170,7 +170,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    function close_session() {
+    function close_session(){
         conversation.innerHTML = "";
         fetch('/close-session', {
             method: 'GET'
@@ -179,7 +179,6 @@ document.addEventListener("DOMContentLoaded", function () {
         chatStartUIChange();
         featureFlags.allowRecords = true; //enable chat recording by default
         setRecord(featureFlags.allowRecords);
-
     }
 
 
@@ -202,7 +201,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function startIdleTimer() {
         clearTimeout(idleTimer);
-        idleTimer = setTimeout(function () {
+        idleTimer = setTimeout (function () {
             saveRecords();
             close_session();
         }, idleTimeoutDuration);
@@ -220,11 +219,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ---------------- INSTRUCTIONS FROM BACKEND ----------------
     var socket = io();
-    socket.on('connect', function () {
-        socket.emit('connection', { state: 'success' });
+    socket.on('connect', function() {
+        socket.emit('connection', {state: 'success'});
     });
 
-    socket.on('instruction', function (instruction) {
+    socket.on('instruction', function(instruction) {
         type = instruction.type
         if (type == 'refresh_session_timer') {
             addMessage(instruction.goodbye_msg, 'assistant');
