@@ -3,8 +3,10 @@ document.addEventListener("DOMContentLoaded", function() {
     // ---------------- USER INTERACTION ----------------
     var conversation = document.getElementById("conversation");
     var userInput = document.getElementById("user-input");
+    var buttonContainer = document.getElementById("button-container");
     var sendButton = document.getElementById("send-button");
     var closeButton = document.getElementById("close-button");
+    var newSessionHint = document.getElementById("new-session-hint");
 
 
     function setFocusOnInput() {
@@ -87,14 +89,41 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
 
+    function chatEndedUIChange() {
+        lockInputField();
+        hideButtonContainer();
+    }
+
+    function chatStartUIChange() {
+        hideNewSessionHint();
+        unlockInputField();
+        setFocusOnInput();
+        showButtonContainer();
+    }
+
     function lockInputField() {
         userInput.disabled = true;
     }
 
-
     function unlockInputField() {
         userInput.disabled = false;
     }
+
+    function showButtonContainer() {
+        buttonContainer.style.display = 'block';
+    }
+
+    function hideButtonContainer() {
+        buttonContainer.style.display = 'none';
+    }
+
+    function showNewSessionHint() {
+       newSessionHint.style.display = 'block';
+    }
+
+    function hideNewSessionHint() {
+        newSessionHint.style.display = 'none';
+     }
 
     function saveRecords() {
         fetch('/save-records', {
@@ -108,8 +137,7 @@ document.addEventListener("DOMContentLoaded", function() {
             method: 'GET'
         });
         console.log('Session refreshed');
-        unlockInputField();
-        setFocusOnInput();
+        chatStartUIChange();
     }
 
 
@@ -153,9 +181,10 @@ document.addEventListener("DOMContentLoaded", function() {
         type = instruction.type
         if (type == 'refresh_session_timer') {
             addMessage(instruction.goodbye_msg, 'assistant');
+            chatEndedUIChange();
             saveRecords();
-            lockInputField();
             setTimeout(close_session, instruction.timer * 1000);  // TODO: clear timer if second call here
+            showNewSessionHint();
         }
         else {
             console.error('Unknown instruction:', type);
