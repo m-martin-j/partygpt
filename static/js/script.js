@@ -6,14 +6,9 @@ document.addEventListener("DOMContentLoaded", function() {
     var buttonContainer = document.getElementById("button-container");
     var sendButton = document.getElementById("send-button");
     var closeButton = document.getElementById("close-button");
-    var setRecordButton = document.getElementById("set-recording");
-    var recordStatus = document.getElementById("recording-status");
+    var recordChatCheckbox = document.getElementById("record-chat-checkbox");
     var chatInfo = document.getElementById("chat-info");
     var newSessionHint = document.getElementById("new-session-hint");
-
-    const featureFlags = {
-        allowRecords: true
-    };
 
 
     chatStartUIChange();
@@ -72,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
 
-    sendButton.addEventListener("click", function () {
+    sendButton.addEventListener("click", function() {
         handleUserInput();
         setFocusOnInput();
     });
@@ -146,28 +141,15 @@ document.addEventListener("DOMContentLoaded", function() {
         newSessionHint.style.display = 'none';
     }
 
-    function setRecord(flag) {
-        const url = `/set-records?flag=${flag}`;
-        fetch(url, {
-            method: 'GET'
-        })
-            .then((response) => {
-                if (response.status === 200) {
-                    return response.json();
-                } else {
-                    console.error('Request failed with status:', response.status);
-                }
-            })
-            .then((data) => {
-                recordStatus.textContent = data.message;
-                setRecordButton.textContent = featureFlags.allowRecords ? 'Disable recording' : 'Enable recording'
-            });
-    }
-
     function saveRecords() {
-        fetch('/save-records', {
-            method: 'GET'
-        });
+        if (recordChatCheckbox.checked) {
+            fetch('/save-records', {
+                method: 'GET'
+            });
+        }
+        else {
+            // no record saving requested
+        }
     }
 
     function close_session(){
@@ -177,8 +159,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
         console.log('Session refreshed');
         chatStartUIChange();
-        featureFlags.allowRecords = true; //enable chat recording by default
-        setRecord(featureFlags.allowRecords);
     }
 
 
@@ -188,11 +168,6 @@ document.addEventListener("DOMContentLoaded", function() {
         close_session();
     });
 
-    setRecordButton.addEventListener("click", function () {
-        console.log("flag is now " + featureFlags.allowRecords);
-        featureFlags.allowRecords = !featureFlags.allowRecords;
-        setRecord(featureFlags.allowRecords);
-    })
 
 
     // ---------------- IDLE REFRESH ----------------

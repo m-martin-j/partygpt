@@ -45,6 +45,7 @@ All you need is a device running Python, a web browser and an account at [OpenAI
 
 ## To Do
 * Website/Frontend
+    * style and positioning of record-chat-checkbox
     * constant idleTimeoutDuration should be read from settings.yml and be defined for frontend via socketio
     * check if input sanitation suffices
     * create concept for allowing guests to load the frontend from their personal devices from within a network (-> distinguish various sessions, load balancing etc.)

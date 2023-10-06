@@ -3,7 +3,7 @@ import logging
 import threading  # TEST
 
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request
 from flask_socketio  import SocketIO, emit
 
 from partygpt import AiGuest
@@ -79,21 +79,6 @@ def refresh_session():
     logger.info('Session refreshed (per frontend).')
     ai_guest.reset(persona=None)
     return ''  # may not return None or omit return statement
-
-@app.route('/set-records', methods=['GET'])
-def set_records():
-    flag = request.args.get('flag')
-    logger.info(f'Chat recording is set to: {flag}')
-    response_data = {}
-    if flag == 'true': # (?)flag param can only be interpreted as string
-        ai_guest.set_conversation_record_folder_path(PATH_FOLDER_CONVERSATION_RECORDS_NAME)
-        response_data['message'] = 'Chat will be recorded'
-    else:
-        ai_guest.set_conversation_record_folder_path('')
-        response_data['message'] = 'Chat will not be recorded'
-
-    response = jsonify(response_data)
-    return response, 200, {'Content-Type': 'application/json'}
 
 def trigger_session_refresh(goodbye_msg):
     logger.info('Session refreshed (per backend).')
