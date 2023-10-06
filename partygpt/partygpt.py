@@ -68,6 +68,9 @@ class Entity:
                 logger.info(f'Wrote conversation to {file_name}.')
             except Exception as e:
                 logger.error(f'Trouble writing conversation history to file: {type(e).__name__}: {e}')
+        else:
+            logger.error('Conversation history not saved. Check if conversation record folder path '
+                         'is defined and message history is not cleared')
 
 
     def set_functions(
