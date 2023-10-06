@@ -27,7 +27,7 @@ log_formatter = logging.Formatter("%(asctime)s:%(levelname)s:%(name)s:%(message)
 log_console_handler = logging.StreamHandler()
 log_console_handler.setLevel(logging.INFO)
 log_console_handler.setFormatter(log_formatter)
-log_file_handler = logging.FileHandler('debug.log')
+log_file_handler = logging.FileHandler('debug.log', encoding='utf-8')
 log_file_handler.setLevel(logging.DEBUG)
 log_file_handler.setFormatter(log_formatter)
 root_logger = logging.getLogger()
@@ -67,6 +67,10 @@ def process_input():
     logger.info(f'Current length of message history: {ai_guest.count_messages()}')  # TODO: debug
     return {'reply': response}
 
+@app.route('/save-records', methods=['GET'])
+def save_records():
+    ai_guest.save_messages_history()
+    return '', 200
 
 @app.route('/close-session', methods=['GET'])
 def refresh_session():

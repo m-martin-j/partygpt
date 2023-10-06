@@ -19,8 +19,10 @@ All you need is a device running Python, a web browser and an account at [OpenAI
     python -m poetry install
     ```
 * Provide an `.env` file with the following environment variables:
-    * OPENAI_API_KEY - [your OpenAI-issued API key](https://platform.openai.com/account/api-keys)
-    * OPENAI_ORG - [your Organization ID](https://platform.openai.com/account/org-settings)
+    ```.env
+    OPENAI_API_KEY=<your OpenAI-issued API key>  # https://platform.openai.com/account/api-keys
+    OPENAI_ORG=<your Organization ID>  # https://platform.openai.com/account/org-settings
+    ```
 
 ## Usage
 * Modify the contents of [`settings.yml`](settings.yml) to personalize the application.
@@ -43,6 +45,7 @@ All you need is a device running Python, a web browser and an account at [OpenAI
 
 ## To Do
 * Website/Frontend
+    * constant idleTimeoutDuration should be read from settings.yml and be defined for frontend via socketio
     * check if input sanitation suffices
     * create concept for allowing guests to load the frontend from their personal devices from within a network (-> distinguish various sessions, load balancing etc.)
 * Python Backend
