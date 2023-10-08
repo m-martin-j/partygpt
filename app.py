@@ -14,7 +14,6 @@ from partygpt.comms.various import read_yaml
 PATH_SETTINGS = 'settings.yml'
 APPLICATION_SETTINGS = read_yaml(path=PATH_SETTINGS)['application']
 PATH_FOLDER_CONVERSATION_RECORDS = APPLICATION_SETTINGS['conversation_records_folder']
-PATH_FOLDER_CONVERSATION_RECORDS_NAME = APPLICATION_SETTINGS['records_folder_name']
 REFRESH_TIMER_AI_GOODBYE = APPLICATION_SETTINGS['refresh_conversation_after_ai_says_goodbye']
 
 app = Flask(__name__)
@@ -47,7 +46,7 @@ def log_connect(data):
 
 @app.route('/')
 def index():
-    ai_guest.set_conversation_record_folder_path(PATH_FOLDER_CONVERSATION_RECORDS_NAME)
+    ai_guest.set_conversation_record_folder_path(PATH_FOLDER_CONVERSATION_RECORDS)
     return render_template('index.html')
 
 @app.route('/process-input', methods=['POST'])
