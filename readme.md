@@ -18,10 +18,10 @@ All you need is a device running Python, a web browser and an account at [OpenAI
     ```sh
     python -m poetry install
     ```
-* Provide an `.env` file with the following environment variables:
+* Provide an `.env` file with the following environment variables (refer to https://platform.openai.com/account/api-keys and https://platform.openai.com/account/org-settings):
     ```.env
-    OPENAI_API_KEY=<your OpenAI-issued API key>  # https://platform.openai.com/account/api-keys
-    OPENAI_ORG=<your Organization ID>  # https://platform.openai.com/account/org-settings
+    OPENAI_API_KEY=<your OpenAI-issued API key>
+    OPENAI_ORG=<your Organization ID>
     ```
 
 ## Usage
