@@ -26,6 +26,8 @@ class Entity:
         self._model = self._settings['model']['id']
         self._openai_chat = OpenaiChat(organisation=os.getenv('OPENAI_ORG'),
                                        api_key=os.getenv('OPENAI_API_KEY'))
+        if not self._openai_chat.check_model_availability(model_name=self._model):
+            raise ValueError(f'Model "{self._model}" not available.')
 
         self._functions = {}
         self._functions_doc = []

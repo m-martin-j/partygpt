@@ -27,6 +27,11 @@ class OpenaiChat:
         model_list = self.client.models.list().data
         return model_list
 
+    def check_model_availability(self, model_name):
+        model_list = self.get_model_list()
+        available_models = [m.id for m in model_list]
+        return model_name in available_models
+
     def _update_total_tokens(self, usage_addendum):
         try:
             completion_t = usage_addendum.completion_tokens
