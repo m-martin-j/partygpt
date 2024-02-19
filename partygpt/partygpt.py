@@ -81,7 +81,7 @@ class Entity:
             raise ValueError('Empty list(s) provided')
 
         functions_names = [el.__name__ for el in functions]
-        functions_doc_names = [el['name'] for el in functions_doc]
+        functions_doc_names = [el['function']['name'] for el in functions_doc]
         if not (set(functions_names) == set(functions_doc_names)):
             raise ValueError('Mismatch between passed functions and function documentations. '
                              f'functions: {functions_names}, function documentations: '
@@ -99,22 +99,20 @@ class Entity:
         if new_path != '':
             logger.info(f'Chat will be recorded to {new_path}')
         else:
-            logger.info('Chat will not be recorded')    
+            logger.info('Chat will not be recorded')
 
     def communicate(
             self,
             messages: list,
-            wait_s: float=0.5,
             max_tokens: int=150,
-            # temperature: float=1.0
+            temperature: float=1.0
             ) -> Tuple[str, dict]:
         response = self._openai_chat.request_completion(
             messages=messages,
             model=self._model,
-            wait_s=wait_s,
             max_tokens=max_tokens,
-            # temperature=temperature,
-            functions=self._functions_doc)
+            temperature=temperature,
+            tools=self._functions_doc)
         return response
 
     def count_messages(self, role: str='none') -> int:
@@ -144,11 +142,16 @@ class AiGuest(Entity):
                          conversation_record_folder_path=conversation_record_folder_path)
         self._guest_settings = self._settings['guest']
 
+        function_doc = [
+            {'type': 'function', 'function': fudo}
+            for fudo in self._guest_settings['function_documentations']
+        ]
+
         self.reset(persona=persona)
 
         self.set_functions(
             functions=functions,
-            functions_doc=self._guest_settings['function_documentations'])
+            functions_doc=function_doc)
 
     def reset(
             self,
