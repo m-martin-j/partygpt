@@ -53,7 +53,7 @@ guest:
           type: string
           description: The goodbye message directed towards the guest.
       required:
-      - goodbye_msg
+      - goodbye
 
 games:
   jokes:
